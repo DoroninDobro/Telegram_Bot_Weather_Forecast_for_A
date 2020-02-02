@@ -1,28 +1,29 @@
-import pyowm # package for forecast of weather
+import pyowm  # package for forecast of weather
 import telebot
 from config import TOKEN, OWM_TOKEN
 from random import randint
-from telebot import types # import buttons
+from telebot import types  # import buttons
 import datetime
 
 bot = telebot.TeleBot(TOKEN)
-owm = pyowm.OWM(OWM_TOKEN, language = "ru")
+owm = pyowm.OWM(OWM_TOKEN, language="ru")
 
-@bot.message_handler(commands=['start']) #it is welcome part
+
+@bot.message_handler(commands=['start'])  # it is welcome part
 def welcome(message):
     sti = open('hello.jpeg', 'rb')
     bot.send_sticker(message.chat.id, sti)
     bot.send_message(message.chat.id, "Привет!\nЯ -твой личный предсказатель! \nЫЫЫ! =))")
 
 
-@bot.message_handler(content_types=['text']) 
+@bot.message_handler(content_types=['text'])
 def send_echo(message):
     # another city
     if message.chat.type == 'private':
         user_text = message.text
         if message.text[0:5] == 'City ':
             try:
-                nc = user_text[5:]    #new_city
+                nc = user_text[5:]    # new_city
                 Nc = owm.weather_at_place(nc)
                 w_Nc = Nc.get_weather()
                 temp_Nc = w_Nc.get_temperature('celsius')["temp"]
@@ -53,7 +54,7 @@ def send_echo(message):
 
             answer = "В Питере сейчас " + w_SP.get_detailed_status()+'\n'
             answer += "Температура в среднем " + str(temp_SP) + '\n\n'
-        
+
             if temp_SP < 10:
                 answer += 'Уууу, зная твою мерзлявость тебе стоит приодеться. =( \n'
             elif temp_SP < 20:
@@ -68,7 +69,7 @@ def send_echo(message):
                 name = f'rain{x_r}.jpeg'
                 stik = open(name, 'rb')
                 bot.send_sticker(message.chat.id, stik)
-            if 'солнечно' in answer or 'солнце' in answer: 
+            if 'солнечно' in answer or 'солнце' in answer:
                 sti2 = open('sun.jpeg', 'rb')
                 bot.send_sticker(message.chat.id, sti2)
                 bot.send_message(message.chat.id, 'Ну наконец-то! Бросай все и беги за витамином D!')
@@ -82,6 +83,7 @@ def send_echo(message):
             markup.add(item1)
             bot.send_message(message.chat.id, 'Хочешь узнать погоду в другом городе?', reply_markup=markup)
 
+
 # function proccesing answer
 @bot.callback_query_handler(func=lambda call: True)
 def callback_inline(call):
@@ -94,9 +96,8 @@ def callback_inline(call):
                                 'совсем маленькие города могут не '
                                 'отображаться, я еще маленький =)')
                 bot.send_message(call.message.chat.id, help_message)
-                
-    
+
     except Exception as e:
         print(repr(e))
 
-bot.polling(none_stop=True) # bor work non-stop
+bot.polling(none_stop=True)  # bor work non-stop
