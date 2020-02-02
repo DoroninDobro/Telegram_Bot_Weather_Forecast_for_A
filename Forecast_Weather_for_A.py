@@ -3,6 +3,7 @@ import telebot
 from config import TOKEN, OWM_TOKEN
 from random import randint
 from telebot import types # import buttons
+import datetime
 
 bot = telebot.TeleBot(TOKEN)
 owm = pyowm.OWM(OWM_TOKEN, language = "ru")
@@ -33,13 +34,12 @@ def send_echo(message):
                 bot.send_message(message.chat.id, answer4)
         # My first easter egg for culture people))
         elif user_text[1:5] == 'hank' or user_text[1:7] == 'пасибо':
-            sti4 = open('niceday.jpeg', 'rb')
-            bot.send_sticker(message.chat.id, sti4)
-
-
-
-
-
+            if 22 > datetime.datetime.now().hour > 6:
+                sti4 = open('niceday.jpeg', 'rb')
+                bot.send_sticker(message.chat.id, sti4)
+            else:
+                sti5 = open('good_night.jpeg', 'rb')
+                bot.send_sticker(message.chat.id, sti5)
         # mainpart: Forecast for Saint-Petersburg
         else:
             SP = owm.weather_at_place('Санкт-Петербург')
