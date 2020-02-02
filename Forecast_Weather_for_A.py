@@ -21,7 +21,7 @@ def send_echo(message):
     # another city
     if message.chat.type == 'private':
         user_text = message.text
-        if message.text[0:5] == 'City ':
+        if message.text[0:5] == 'City ' or message.text[0:5] == 'city ':
             try:
                 nc = user_text[5:]    # new_city
                 Nc = owm.weather_at_place(nc)
