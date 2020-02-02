@@ -64,7 +64,7 @@ def send_echo(message):
             answer += 'Зато на Бали сейчас ' + str(temp_Bali) + '! И манго!'
 
             # add stickers =))
-            if 'пасмурно' in answer or 'дождь' in answer or 'ливень' in answer:
+            if 'дождь' in answer or 'ливень' in answer:
                 x_r = randint(1, 7)
                 name = f'rain{x_r}.jpeg'
                 stik = open(name, 'rb')
